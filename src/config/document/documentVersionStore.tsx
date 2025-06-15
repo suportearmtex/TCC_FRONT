@@ -1,4 +1,4 @@
-// src/store/documentVersionStore.ts
+// src/store/documentVersionStore.ts - Integrated with backend
 import { create } from 'zustand';
 import { DocumentVersion } from '../../types/document';
 import { getCookie } from '../../utils/cookies';
@@ -28,54 +28,21 @@ export const useDocumentVersionStore = create<DocumentVersionState>((set, get) =
     const token = getCookie('authToken');
 
     try {
-      // Aqui você faria a chamada real para a API
-      // const response = await fetch(`https://localhost:7198/DocumentVersion/GetVersionsByDocument/${documentId}`, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // });
-
-      // const data = await response.json();
-
-      // if (data.erro) {
-      //   throw new Error(data.mensagem || 'Failed to fetch document versions');
-      // }
-
-      // set({ versions: data.objeto, loading: false });
-
-      // Simulação para desenvolvimento
-      const mockVersions: DocumentVersion[] = [
-        {
-          documentVersionId: 1,
-          documentId: documentId,
-          content: '<p>Versão inicial do documento</p>',
-          createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          userId: 1,
-          comment: 'Versão inicial'
-        },
-        {
-          documentVersionId: 2,
-          documentId: documentId,
-          content: '<p>Versão inicial do documento com pequenas correções</p>',
-          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          userId: 2,
-          comment: 'Correções de gramática'
-        },
-        {
-          documentVersionId: 3,
-          documentId: documentId,
-          content: '<p>Versão inicial do documento com pequenas correções e novos parágrafos adicionados</p>',
-          createdAt: new Date().toISOString(),
-          userId: 1,
-          comment: 'Adicionado novo conteúdo'
+      const response = await fetch(`https://localhost:7198/DocumentVersion/GetVersionsByDocument/${documentId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
-      ];
+      });
 
-      setTimeout(() => {
-        set({ versions: mockVersions, loading: false });
-      }, 500);
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to fetch document versions');
+      }
+
+      set({ versions: data.objeto || [], loading: false });
 
     } catch (error) {
       let errorMessage = 'Failed to fetch document versions';
@@ -96,46 +63,34 @@ export const useDocumentVersionStore = create<DocumentVersionState>((set, get) =
     const token = getCookie('authToken');
 
     try {
-      // Aqui você faria a chamada real para a API
-      // const response = await fetch('https://localhost:7198/DocumentVersion/CreateVersion', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   },
-      //   body: JSON.stringify({
-      //     documentId,
-      //     content,
-      //     comment
-      //   })
-      // });
+      const response = await fetch('https://localhost:7198/DocumentVersion/CreateVersion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          documentId,
+          content,
+          comment
+        })
+      });
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      // if (data.erro) {
-      //   throw new Error(data.mensagem || 'Failed to create document version');
-      // }
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to create document version');
+      }
 
-      // Simulação para desenvolvimento
-      const newVersion: DocumentVersion = {
-        documentVersionId: get().versions.length + 1,
-        documentId: documentId,
-        content: content,
-        createdAt: new Date().toISOString(),
-        userId: 1, // Deveria vir do usuário logado
-        comment: comment
-      };
-
-      await new Promise(resolve => setTimeout(resolve, 500));
-
+      // Atualiza o estado com a nova versão
       set(state => ({
-        versions: [...state.versions, newVersion],
+        versions: [...state.versions, data.objeto],
         loading: false
       }));
 
-      getNotificationStore().showNotification('Versão criada com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Versão criada com sucesso!', 'success');
 
-      return newVersion;
+      return data.objeto;
 
     } catch (error) {
       let errorMessage = 'Failed to create document version';
@@ -153,27 +108,23 @@ export const useDocumentVersionStore = create<DocumentVersionState>((set, get) =
     const token = getCookie('authToken');
 
     try {
-      // Aqui você faria a chamada real para a API
-      // const response = await fetch(`https://localhost:7198/DocumentVersion/RestoreVersion/${versionId}`, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // });
+      const response = await fetch(`https://localhost:7198/DocumentVersion/RestoreVersion/${versionId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      // if (data.erro) {
-      //   throw new Error(data.mensagem || 'Failed to restore document version');
-      // }
-
-      // Simulação para desenvolvimento
-      await new Promise(resolve => setTimeout(resolve, 500));
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to restore document version');
+      }
 
       set({ loading: false });
 
-      getNotificationStore().showNotification('Versão restaurada com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Versão restaurada com sucesso!', 'success');
 
     } catch (error) {
       let errorMessage = 'Failed to restore document version';
@@ -191,30 +142,27 @@ export const useDocumentVersionStore = create<DocumentVersionState>((set, get) =
     const token = getCookie('authToken');
 
     try {
-      // Aqui você faria a chamada real para a API
-      // const response = await fetch(`https://localhost:7198/DocumentVersion/DeleteVersion/${versionId}`, {
-      //   method: 'DELETE',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // });
+      const response = await fetch(`https://localhost:7198/DocumentVersion/DeleteVersion/${versionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-      // const data = await response.json();
+      const data = await response.json();
 
-      // if (data.erro) {
-      //   throw new Error(data.mensagem || 'Failed to delete document version');
-      // }
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to delete document version');
+      }
 
-      // Simulação para desenvolvimento
-      await new Promise(resolve => setTimeout(resolve, 500));
-
+      // Remove a versão do estado
       set(state => ({
         versions: state.versions.filter(version => version.documentVersionId !== versionId),
         loading: false
       }));
 
-      getNotificationStore().showNotification('Versão excluída com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Versão excluída com sucesso!', 'success');
 
     } catch (error) {
       let errorMessage = 'Failed to delete document version';

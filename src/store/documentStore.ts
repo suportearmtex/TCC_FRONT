@@ -1,4 +1,4 @@
-// src/store/documentStore.ts
+// src/store/documentStore.ts - Integrated with backend
 import { create } from 'zustand';
 import { Document, DocumentState, Folder, Tag } from '../types/document';
 import { getCookie } from '../utils/cookies';
@@ -13,49 +13,25 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   fetchDocuments: async () => {
     set({ loading: true, error: null });
-    // Simulação - em um ambiente real, faríamos a requisição para a API
-    try {
-      // Dados de exemplo para simulação
-      const mockDocuments: Document[] = [
-        {
-          documentId: 1,
-          title: 'Política de Privacidade',
-          content: '<p>Este é um documento de política de privacidade.</p>',
-          format: 'html',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          userId: 1,
-          folderId: 1,
-          isActive: true
-        },
-        {
-          documentId: 2,
-          title: 'Manual do Usuário',
-          content: '<p>Este é um manual de instruções para o usuário.</p>',
-          format: 'html',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          userId: 2,
-          folderId: 2,
-          isActive: true
-        },
-        {
-          documentId: 3,
-          title: 'Contrato de Serviço',
-          content: '<p>Termos e condições do contrato de serviço.</p>',
-          format: 'html',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          userId: 1,
-          folderId: 1,
-          isActive: false
-        }
-      ];
+    const token = getCookie('authToken');
 
-      // Simulando uma chamada assíncrona
-      setTimeout(() => {
-        set({ documents: mockDocuments, loading: false });
-      }, 500);
+    try {
+      const response = await fetch('https://localhost:7198/Document/GetListDocument', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to fetch documents');
+      }
+
+      set({ documents: data.objeto || [], loading: false });
+
     } catch (error) {
       let errorMessage = 'Failed to fetch documents';
       if (error instanceof Error) {
@@ -72,29 +48,40 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   addDocument: async (documentData: Omit<Document, 'documentId' | 'isActive' | 'createdAt' | 'updatedAt'>) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simulação de adição de documento
-      const newDocument: Document = {
+      const newDocument = {
         ...documentData,
-        documentId: Math.floor(Math.random() * 1000) + 10, // Simulando um ID gerado
         isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/Document/AddDocument', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newDocument)
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to add document');
+      }
 
       // Atualiza o estado com o novo documento
       set(state => ({
-        documents: [...state.documents, newDocument],
+        documents: [...state.documents, data.objeto],
         loading: false
       }));
 
-      getNotificationStore().showNotification('Documento criado com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Documento criado com sucesso!', 'success');
 
-      return newDocument;
+      return data.objeto;
     } catch (error) {
       let errorMessage = 'Failed to add document';
       if (error instanceof Error) {
@@ -108,17 +95,29 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   updateDocument: async (id: number, documentData: Partial<Document>) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simulação de atualização de documento
       const updatedDocument = {
         ...documentData,
         documentId: id,
         updatedAt: new Date().toISOString()
       };
 
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/Document/UpdateDocument', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedDocument)
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to update document');
+      }
 
       // Atualiza o estado com o documento atualizado
       set(state => ({
@@ -128,7 +127,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
         loading: false
       }));
 
-      getNotificationStore().showNotification('Documento atualizado com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Documento atualizado com sucesso!', 'success');
     } catch (error) {
       let errorMessage = 'Failed to update document';
       if (error instanceof Error) {
@@ -142,10 +141,22 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   toggleDocumentStatus: async (id: number) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch(`https://localhost:7198/Document/ToggleStatusDocument/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to toggle document status');
+      }
 
       // Atualiza o estado alternando o status do documento
       set(state => ({
@@ -155,7 +166,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
         loading: false
       }));
 
-      getNotificationStore().showNotification('Status do documento alterado com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Status do documento alterado com sucesso!', 'success');
     } catch (error) {
       let errorMessage = 'Failed to toggle document status';
       if (error instanceof Error) {
@@ -169,41 +180,24 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   fetchFolders: async () => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Dados de exemplo para simulação
-      const mockFolders: Folder[] = [
-        {
-          folderId: 1,
-          name: 'Documentos Gerais',
-          userId: 1,
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          folderId: 2,
-          name: 'Manuais',
-          userId: 1,
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          folderId: 3,
-          name: 'Contratos',
-          parentFolderId: 1,
-          userId: 2,
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      const response = await fetch('https://localhost:7198/Folder/GetListFolder', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
-      ];
+      });
 
-      // Simulando uma chamada assíncrona
-      setTimeout(() => {
-        set({ folders: mockFolders, loading: false });
-      }, 500);
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to fetch folders');
+      }
+
+      set({ folders: data.objeto || [], loading: false });
     } catch (error) {
       let errorMessage = 'Failed to fetch folders';
       if (error instanceof Error) {
@@ -216,29 +210,40 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   addFolder: async (folderData: Omit<Folder, 'folderId' | 'isActive' | 'createdAt' | 'updatedAt'>) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simulação de adição de pasta
-      const newFolder: Folder = {
+      const newFolder = {
         ...folderData,
-        folderId: Math.floor(Math.random() * 1000) + 10,
         isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/Folder/AddFolder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newFolder)
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to add folder');
+      }
 
       // Atualiza o estado com a nova pasta
       set(state => ({
-        folders: [...state.folders, newFolder],
+        folders: [...state.folders, data.objeto],
         loading: false
       }));
 
-      getNotificationStore().showNotification('Pasta criada com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Pasta criada com sucesso!', 'success');
 
-      return newFolder;
+      return data.objeto;
     } catch (error) {
       let errorMessage = 'Failed to add folder';
       if (error instanceof Error) {
@@ -252,37 +257,24 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   fetchTags: async () => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Dados de exemplo para simulação
-      const mockTags: Tag[] = [
-        {
-          tagId: 1,
-          name: 'Importante',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          tagId: 2,
-          name: 'Contrato',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        },
-        {
-          tagId: 3,
-          name: 'Manual',
-          isActive: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+      const response = await fetch('https://localhost:7198/Tag/GetListTag', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
-      ];
+      });
 
-      // Simulando uma chamada assíncrona
-      setTimeout(() => {
-        set({ tags: mockTags, loading: false });
-      }, 500);
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to fetch tags');
+      }
+
+      set({ tags: data.objeto || [], loading: false });
     } catch (error) {
       let errorMessage = 'Failed to fetch tags';
       if (error instanceof Error) {
@@ -295,29 +287,40 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   addTag: async (tagData: Omit<Tag, 'tagId' | 'isActive' | 'createdAt' | 'updatedAt'>) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simulação de adição de tag
-      const newTag: Tag = {
+      const newTag = {
         ...tagData,
-        tagId: Math.floor(Math.random() * 1000) + 10,
         isActive: true,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/Tag/AddTag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newTag)
+      });
+
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to add tag');
+      }
 
       // Atualiza o estado com a nova tag
       set(state => ({
-        tags: [...state.tags, newTag],
+        tags: [...state.tags, data.objeto],
         loading: false
       }));
 
-      getNotificationStore().showNotification('Tag criada com sucesso!', 'success');
+      getNotificationStore().showNotification(data.mensagem || 'Tag criada com sucesso!', 'success');
 
-      return newTag;
+      return data.objeto;
     } catch (error) {
       let errorMessage = 'Failed to add tag';
       if (error instanceof Error) {
@@ -331,12 +334,25 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   addTagToDocument: async (documentId: number, tagId: number) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/DocumentTag/AddDocumentTag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ documentId, tagId })
+      });
 
-      getNotificationStore().showNotification('Tag adicionada ao documento com sucesso!', 'success');
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to add tag to document');
+      }
+
+      getNotificationStore().showNotification(data.mensagem || 'Tag adicionada ao documento com sucesso!', 'success');
     } catch (error) {
       let errorMessage = 'Failed to add tag to document';
       if (error instanceof Error) {
@@ -352,12 +368,25 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
   removeTagFromDocument: async (documentId: number, tagId: number) => {
     set({ loading: true, error: null });
+    const token = getCookie('authToken');
     
     try {
-      // Simular uma chamada de API com um tempo de espera
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('https://localhost:7198/DocumentTag/DeleteDocumentTag', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ documentId, tagId })
+      });
 
-      getNotificationStore().showNotification('Tag removida do documento com sucesso!', 'success');
+      const data = await response.json();
+
+      if (data.erro) {
+        throw new Error(data.mensagem || 'Failed to remove tag from document');
+      }
+
+      getNotificationStore().showNotification(data.mensagem || 'Tag removida do documento com sucesso!', 'success');
     } catch (error) {
       let errorMessage = 'Failed to remove tag from document';
       if (error instanceof Error) {
