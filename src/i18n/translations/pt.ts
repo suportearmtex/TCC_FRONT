@@ -1,4 +1,4 @@
-// src/i18n/translations/pt.ts - Portuguese translations
+// src/i18n/translations/pt.ts - Portuguese translations with new additions
 
 export const ptTranslations = {
   // Authentication
@@ -23,6 +23,9 @@ export const ptTranslations = {
   options: 'Opções',
   close: 'Fechar',
   back: 'Voltar',
+  add: 'Adicionar',
+  done: 'Concluído',
+  saving: 'Salvando...',
   
   // Employee Management
   employeeManagement: 'Gestão de Funcionários',
@@ -79,7 +82,10 @@ export const ptTranslations = {
   documents: 'Documentos',
   addDocument: 'Adicionar Documento',
   editDocument: 'Editar Documento',
+  newDocument: 'Novo Documento',
   documentWorkspace: 'Workspace de Documentos',
+  documentEditor: 'Editor de Documentos',
+  documentManagement: 'Gerenciamento de Documentos',
   searchDocuments: 'Buscar documentos...',
   noDocumentsFound: 'Nenhum documento encontrado correspondente à sua busca',
   noDocumentsYet: 'Nenhum documento adicionado ainda',
@@ -87,16 +93,38 @@ export const ptTranslations = {
   format: 'Formato',
   folder: 'Pasta',
   content: 'Conteúdo',
+  documentTitle: 'Título do Documento',
+  lastEdit: 'Última Edição',
+  today: 'Hoje',
+  manageTags: 'Gerenciar Tags',
+  addNewTag: 'Adicionar Nova Tag',
+  enterNewTag: 'Digite uma nova tag',
+  currentTags: 'Tags Atuais',
+  noTagsAdded: 'Nenhuma tag adicionada',
+  saveDocument: 'Salvar Documento',
+  fileName: 'Nome do Arquivo',
+  saveLocation: 'Local de Salvamento',
+  change: 'Alterar',
+  version: 'Versão',
+  versions: 'Versões',
+  newVersion: 'Nova Versão',
+  replaceCurrentVersion: 'Substituir Versão Atual',
+  share: 'Compartilhar',
+  paragraph: 'Parágrafo',
+  heading: 'Título',
   
   // Task Management
   tasks: 'Tarefas',
   taskDashboard: 'Painel de Tarefas',
+  taskBoard: 'Quadro de Tarefas',
   addTask: 'Adicionar Tarefa',
   editTask: 'Editar Tarefa',
+  newTask: 'Nova Tarefa',
   taskManagement: 'Gerenciamento de Tarefas',
   searchTasks: 'Buscar tarefas...',
   noTasksFound: 'Nenhuma tarefa encontrada correspondente à sua busca',
   noTasksYet: 'Nenhuma tarefa adicionada ainda',
+  noTasksInStatus: 'Nenhuma tarefa neste status',
   description: 'Descrição',
   dueDate: 'Data de Vencimento',
   assignee: 'Responsável',
@@ -119,6 +147,9 @@ export const ptTranslations = {
   searchUsers: 'Buscar usuários...',
   noUsers: 'Nenhum usuário disponível',
   noUsersFound: 'Nenhum usuário encontrado correspondente à sua busca',
+  allPriorities: 'Todas as Prioridades',
+  allAssignees: 'Todos os Responsáveis',
+  myTasks: 'Minhas Tarefas',
   
   // Task Statuses
   todo: 'A Fazer',

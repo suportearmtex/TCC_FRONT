@@ -1,4 +1,4 @@
-// src/i18n/translations/en.ts - English translations
+// src/i18n/translations/en.ts - English translations with new additions
 
 export const enTranslations = {
   // Authentication
@@ -23,6 +23,9 @@ export const enTranslations = {
   options: 'Options',
   close: 'Close',
   back: 'Back',
+  add: 'Add',
+  done: 'Done',
+  saving: 'Saving...',
   
   // Employee Management
   employeeManagement: 'Employee Management',
@@ -79,7 +82,10 @@ export const enTranslations = {
   documents: 'Documents',
   addDocument: 'Add Document',
   editDocument: 'Edit Document',
+  newDocument: 'New Document',
   documentWorkspace: 'Document Workspace',
+  documentEditor: 'Document Editor',
+  documentManagement: 'Document Management',
   searchDocuments: 'Search documents...',
   noDocumentsFound: 'No documents found matching your search',
   noDocumentsYet: 'No documents added yet',
@@ -87,16 +93,38 @@ export const enTranslations = {
   format: 'Format',
   folder: 'Folder',
   content: 'Content',
+  documentTitle: 'Document Title',
+  lastEdit: 'Last Edit',
+  today: 'Today',
+  manageTags: 'Manage Tags',
+  addNewTag: 'Add New Tag',
+  enterNewTag: 'Enter a new tag',
+  currentTags: 'Current Tags',
+  noTagsAdded: 'No tags added',
+  saveDocument: 'Save Document',
+  fileName: 'File Name',
+  saveLocation: 'Save Location',
+  change: 'Change',
+  version: 'Version',
+  versions: 'Versions',
+  newVersion: 'New Version',
+  replaceCurrentVersion: 'Replace Current Version',
+  share: 'Share',
+  paragraph: 'Paragraph',
+  heading: 'Heading',
   
   // Task Management - Novos textos adicionados
   tasks: 'Tasks',
   taskDashboard: 'Task Dashboard',
+  taskBoard: 'Task Board',
   addTask: 'Add Task',
   editTask: 'Edit Task',
+  newTask: 'New Task',
   taskManagement: 'Task Management',
   searchTasks: 'Search tasks...',
   noTasksFound: 'No tasks found matching your search',
   noTasksYet: 'No tasks added yet',
+  noTasksInStatus: 'No tasks in this status',
   description: 'Description',
   dueDate: 'Due Date',
   assignee: 'Assignee',
@@ -119,6 +147,9 @@ export const enTranslations = {
   searchUsers: 'Search users...',
   noUsers: 'No users available',
   noUsersFound: 'No users found matching your search',
+  allPriorities: 'All Priorities',
+  allAssignees: 'All Assignees',
+  myTasks: 'My Tasks',
   
   // Task Statuses
   todo: 'To Do',
