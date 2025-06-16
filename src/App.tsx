@@ -18,6 +18,7 @@ import { CompaniesManagement } from './config/company/Companies';
 import { DocumentManagement } from './config/document/Document';
 import { DocumentWorkspace } from './config/document/DocumentWorkspace';
 import { DocumentEditor } from './config/document/DocumentEditor';
+import { MarkdownEditor } from './config/document/MarkdownEditor';
 import { TaskManagement } from './config/task/Task';
 import { TaskDashboard } from './config/task/TaskDashboard';
 import { TaskKanbanBoard } from './config/task/TaskKanbanBoard';
@@ -120,6 +121,22 @@ function App() {
             element={
               <PrivateRoute>
                 <DocumentEditor />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/documents/markdown'
+            element={
+              <PrivateRoute>
+                <MarkdownEditor />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/documents/markdown/:documentId'
+            element={
+              <PrivateRoute>
+                <MarkdownEditor />
               </PrivateRoute>
             }
           />

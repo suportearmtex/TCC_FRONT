@@ -1,8 +1,8 @@
-// Atualizando o componente NavBar.tsx para incluir links para o editor e kanban board
+// Atualizando o componente NavBar.tsx para incluir links para o editor markdown
 
 // src/components/common/NavBar.tsx
 import { useState } from 'react';
-import { LayoutDashboard, LogOut, User, ChevronDown, Settings, Moon, Sun, Globe, Users, Building, Grid, Menu, X, FileText, CheckSquare, Edit, Kanban } from 'lucide-react';
+import { LayoutDashboard, LogOut, User, ChevronDown, Settings, Moon, Sun, Globe, Users, Building, Grid, Menu, X, FileText, CheckSquare, Edit, Kanban, Type } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '../../hooks/useLanguage';
 import { useAuthStore } from '../../store/authStore';
@@ -110,6 +110,12 @@ export const NavBar = () => {
                                             className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
                                         >
                                             {t('documentEditor')}
+                                        </Link>
+                                        <Link 
+                                            to="/documents/markdown" 
+                                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
+                                        >
+                                            Markdown Editor
                                         </Link>
                                     </div>
                                 </div>
@@ -294,6 +300,14 @@ export const NavBar = () => {
                         >
                             <Edit className="h-5 w-5 inline-block mr-2" />
                             {t('documentEditor')}
+                        </button>
+                        
+                        <button 
+                            onClick={() => handleNavigate('/documents/markdown')}
+                            className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400"
+                        >
+                            <Type className="h-5 w-5 inline-block mr-2" />
+                            Markdown Editor
                         </button>
                         
                         {/* Task Links Mobile */}

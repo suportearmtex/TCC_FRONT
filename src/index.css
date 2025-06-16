@@ -1,3 +1,169 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for Markdown Editor */
+.prose {
+  max-width: none;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold text-gray-900 dark:text-white mb-4;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold text-gray-900 dark:text-white mb-3;
+}
+
+.prose h3 {
+  @apply text-xl font-bold text-gray-900 dark:text-white mb-2;
+}
+
+.prose p {
+  @apply text-gray-700 dark:text-gray-300 mb-4;
+}
+
+.prose strong {
+  @apply font-bold text-gray-900 dark:text-white;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose code {
+  @apply bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.prose pre code {
+  @apply bg-transparent text-gray-800 dark:text-gray-200 p-0;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic text-gray-600 dark:text-gray-400 mb-4;
+}
+
+.prose ul {
+  @apply list-disc list-inside mb-4 text-gray-700 dark:text-gray-300;
+}
+
+.prose ol {
+  @apply list-decimal list-inside mb-4 text-gray-700 dark:text-gray-300;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose a {
+  @apply text-blue-600 dark:text-blue-400 hover:underline;
+}
+
+.prose .wiki-link {
+  @apply text-purple-600 dark:text-purple-400 hover:underline;
+}
+
+.prose .tag {
+  @apply bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.prose table {
+  @apply w-full border-collapse border border-gray-300 dark:border-gray-600 mb-4;
+}
+
+.prose th,
+.prose td {
+  @apply border border-gray-300 dark:border-gray-600 px-3 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-gray-100 dark:bg-gray-800 font-semibold;
+}
+
+.prose img {
+  @apply max-w-full h-auto rounded-lg shadow-md mb-4;
+}
+
+/* Checkbox styling */
+.prose input[type="checkbox"] {
+  @apply mr-2;
+}
+
+/* Syntax highlighting placeholder */
+.language-javascript,
+.language-python,
+.language-html,
+.language-css {
+  @apply text-gray-800 dark:text-gray-200;
+}
+
+/* Auto-complete dropdown */
+.autocomplete-dropdown {
+  @apply absolute bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-50 max-h-40 overflow-y-auto;
+}
+
+.autocomplete-item {
+  @apply block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer;
+}
+
+/* Toolbar button hover effects */
+.toolbar-button {
+  @apply p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150;
+}
+
+/* Editor focus styles */
+.editor-textarea:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-opacity-50;
+}
+
+/* Preview panel styles */
+.preview-panel {
+  @apply bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .prose {
+    @apply text-sm;
+  }
+  
+  .prose h1 {
+    @apply text-2xl;
+  }
+  
+  .prose h2 {
+    @apply text-xl;
+  }
+  
+  .prose h3 {
+    @apply text-lg;
+  }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .prose {
+    @apply text-gray-300;
+  }
+}
+
+/* Scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
